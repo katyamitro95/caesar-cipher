@@ -15,7 +15,7 @@ public class FileManager {
             Path path = Path.of(filePath);
             return Files.readString(path, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new CipherException("Возникла ошибка при чтения файла: " + filePath, e);
+            throw new CipherException("Возникла ошибка при чтении файла: " + filePath, e);
         }
     }
 
