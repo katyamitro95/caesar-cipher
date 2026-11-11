@@ -16,7 +16,7 @@ public class BruteForce {
             String variantDecryptedText = cipher.decrypt(encryptedText, key);
             int variantScore = evaluateDecryptedText(variantDecryptedText);
 
-            // если получили оценку строго больше, то возьмем этот ключ
+            // если оценка строго больше, то возьмем этот ключ
             // или если оценка равна, но пробелов в этом тексте больше - тоже берем
             if (variantScore > bestPoint ||
                     (variantScore == bestPoint && countSpaces(variantDecryptedText) > countSpaces(bestDecryptedText))) {
@@ -53,7 +53,7 @@ public class BruteForce {
             }
         }
 
-        //штраф за слова без гласных, так как в русском языке не бывает слов только из согласных (кроме предлогов)
+        // штраф за слова без гласных, так как в русском языке не бывает слов только из согласных (кроме предлогов)
         String russianVowels = "аеёиоуыэюя";
         for (String word : words) {
             if (word.isEmpty()) {
