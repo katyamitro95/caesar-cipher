@@ -64,7 +64,7 @@ public class MainApp {
     }
 
     private void encryptFile() throws CipherException {
-        String inputFile = askInputFile("Введите путь к исходному файлу: ");
+        String inputFile = askInputFile("Введите путь к исходному файлу для зашифровки: ");
         String outputFile = askOutputFile("Введите путь к файлу для результата зашифровки: ");
         int key = readValidKey();
 
@@ -72,30 +72,30 @@ public class MainApp {
         String encryptedText = cipher.encrypt(inputText, key);
         fileManager.writeFile(encryptedText, outputFile);
 
-        System.out.println("Текст файла был успешно зашифрован и сохранен в: " + outputFile);
+        System.out.println("Текст файла был зашифрован и сохранен в: " + outputFile);
     }
 
     private void decryptFile() throws CipherException {
         String inputFile = askInputFile("Введите путь к зашифрованному файлу: ");
-        String outputFile = askOutputFile("Введите путь к файлу для результата расшифровки: ");
+        String outputFile = askOutputFile("Введите путь к файлу для сохранения результата расшифровки: ");
         int key = readValidKey();
 
         String inputText = fileManager.readFile(inputFile);
         String decryptedText = cipher.decrypt(inputText, key);
         fileManager.writeFile(decryptedText, outputFile);
 
-        System.out.println("Текст файла был успешно расшифрован и сохранен в: " + outputFile);
+        System.out.println("Текст файла был расшифрован и сохранен в: " + outputFile);
     }
 
     private void bruteForceFile() throws CipherException {
         String inputFile = askInputFile("Введите путь к зашифрованному файлу: ");
-        String outputFile = askOutputFile("Введите путь к файлу для результата расшифровки: ");
+        String outputFile = askOutputFile("Введите путь к файлу для сохранения результата расшифровки: ");
 
         String inputText = fileManager.readFile(inputFile);
         String decryptedText = bruteForce.decryptByBruteForce(inputText, ALPHABET);
         fileManager.writeFile(decryptedText, outputFile);
 
-        System.out.println("Текст файла был успешно взломан и сохранен в: " + outputFile);
+        System.out.println("Текст файла был взломан и сохранен в: " + outputFile);
 
     }
 
@@ -126,7 +126,7 @@ public class MainApp {
     private String askInputFile(String text) throws CipherException {
         String inputFile = ask(text);
         if (!validator.isFileExists(inputFile)) {
-            throw new CipherException("Файл не был найден или является папкой: " + inputFile);
+            throw new CipherException("Входящий файл не был найден или является папкой: " + inputFile);
         }
         return inputFile;
     }
