@@ -64,15 +64,8 @@ public class MainApp {
     }
 
     private void encryptFile() throws CipherException {
-        String inputFile = ask("Введите путь к исходному файлу: ");
-        if (!validator.isFileExists(inputFile)) {
-            throw new CipherException("Файл не был найден или является папкой: " + inputFile);
-        }
-
-        String outputFile = ask("Введите путь к файлу для результата: ");
-        if (outputFile == null || outputFile.isBlank()) {
-            throw new CipherException("Путь к выходному файлу не может быть пустым!");
-        }
+        String inputFile = askInputFile("Введите путь к исходному файлу: ");
+        String outputFile = askOutputFile("Введите путь к файлу для результата зашифровки: ");
         int key = readValidKey();
 
         String inputText = fileManager.readFile(inputFile);
@@ -83,15 +76,8 @@ public class MainApp {
     }
 
     private void decryptFile() throws CipherException {
-        String inputFile = ask("Введите путь к зашифрованному файлу: ");
-        if (!validator.isFileExists(inputFile)) {
-            throw new CipherException("Файл не был найден или является папкой: " + inputFile);
-        }
-
-        String outputFile = ask("Введите путь к файлу для результата: ");
-        if (outputFile == null || outputFile.isBlank()) {
-            throw new CipherException("Путь к выходному файлу не может быть пустым!");
-        }
+        String inputFile = askInputFile("Введите путь к зашифрованному файлу: ");
+        String outputFile = askOutputFile("Введите путь к файлу для результата расшифровки: ");
         int key = readValidKey();
 
         String inputText = fileManager.readFile(inputFile);
@@ -102,15 +88,8 @@ public class MainApp {
     }
 
     private void bruteForceFile() throws CipherException {
-        String inputFile = ask("Введите путь к зашифрованному файлу: ");
-        if (!validator.isFileExists(inputFile)) {
-            throw new CipherException("Файл не был найден или является папкой: " + inputFile);
-        }
-
-        String outputFile = ask("Введите путь к файлу для результата: ");
-        if (outputFile == null || outputFile.isBlank()) {
-            throw new CipherException("Путь к выходному файлу не может быть пустым!");
-        }
+        String inputFile = askInputFile("Введите путь к зашифрованному файлу: ");
+        String outputFile = askOutputFile("Введите путь к файлу для результата расшифровки: ");
 
         String inputText = fileManager.readFile(inputFile);
         String decryptedText = bruteForce.decryptByBruteForce(inputText, ALPHABET);
@@ -134,6 +113,22 @@ public class MainApp {
                 System.out.println("Ошибка: введите именно число.");
             }
         }
+    }
+
+    private String askOutputFile(String text) throws CipherException {
+        String outputFile = ask(text);
+        if (outputFile.isBlank()) {
+            throw new CipherException("Путь к выходному файлу не может быть пустым!");
+        }
+        return outputFile;
+    }
+
+    private String askInputFile(String text) throws CipherException {
+        String inputFile = ask(text);
+        if (!validator.isFileExists(inputFile)) {
+            throw new CipherException("Файл не был найден или является папкой: " + inputFile);
+        }
+        return inputFile;
     }
 
     private String ask(String prompt) {
