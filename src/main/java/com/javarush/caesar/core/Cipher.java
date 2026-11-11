@@ -29,16 +29,17 @@ public class Cipher {
             throw new CipherException("Ключ должен быть в диапазоне от 0 до " + (size - 1));
         }
 
-        StringBuilder strinBuid = new StringBuilder(text.length());
+        StringBuilder stringBuid = new StringBuilder(text.length());
         for (char letter : text.toCharArray()) {
             Integer index = referenceMap.get(Character.toLowerCase(letter));
             if (index == null) {
-                strinBuid.append(letter);
+                stringBuid.append(letter);
             } else {
-                strinBuid.append(alphabet[(index + shift) % size]);
+                stringBuid.append(alphabet[(index + shift) % size]);
             }
         }
-        return strinBuid.toString();
+
+        return stringBuid.toString();
     }
 
     public String decrypt(String encryptedText, int shift) throws CipherException {
@@ -54,7 +55,6 @@ public class Cipher {
         StringBuilder stringBuid = new StringBuilder(encryptedText.length());
         for (char c : encryptedText.toCharArray()) {
             Integer index = referenceMap.get(Character.toLowerCase(c));
-
             if (index == null) {
                 if (c == '\n' || c == '\r' || c == '\t') {
                     stringBuid.append(c);
@@ -66,6 +66,7 @@ public class Cipher {
                 stringBuid.append(alphabet[newIndex]);
             }
         }
+
         return stringBuid.toString();
     }
 }
