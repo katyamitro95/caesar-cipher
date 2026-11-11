@@ -16,18 +16,17 @@ public class BruteForce {
             String variantDecryptedText = cipher.decrypt(encryptedText, key);
             int variantScore = evaluateDecryptedText(variantDecryptedText);
 
-            // если оценка строго больше, то возьмем этот ключ
-            // или если оценка равна, но пробелов в этом тексте больше - тоже берем
+            // обновляю лучший результат, если текущий вариант набрал больше баллов
+            // если баллы равны, сравниваю количество пробелов: где их больше, тот текст считаю лучшим
             if (variantScore > bestPoint ||
                     (variantScore == bestPoint && countSpaces(variantDecryptedText) > countSpaces(bestDecryptedText))) {
                 bestPoint = variantScore;
                 bestDecryptedText = variantDecryptedText;
                 bestFoundKey = key;
             }
-
         }
 
-        System.out.println("Подобрали ключ " + bestFoundKey);
+        System.out.println("Подобрали ключ: " + bestFoundKey);
         return bestDecryptedText;
     }
 
@@ -35,14 +34,14 @@ public class BruteForce {
         int points = 0;
         char[] charsArray = decryptedText.toCharArray();
 
-        // баллы за пробелы, так как в нормальном тексте много пробелов, они разделяют слова
+        // плюс баллы за пробелы, так как в нормальном русском тексте много пробелов для разделения слов
         for (char letter : charsArray) {
             if (letter == ' ') {
                 points += 5;
             }
         }
 
-        // баллы за некоторые короткие слова, которые встречаются в русском тексте очень часто
+        // плюс баллы за некоторые короткие слова, которые встречаются в русском тексте довольно часто
         String[] words = decryptedText.split(" ");
         String[] commonUsedArray = {"и", "в", "на", "не", "с", "а", "по"};
         for (String word : words) {
@@ -71,7 +70,7 @@ public class BruteForce {
             }
         }
 
-        // после точки или запятой в тексте всегда должен идти пробел, за это баллы
+        // после точки или запятой в тексте всегда должен идти пробел, за это плюс баллы
         String punctuationMarks = ".,!?";
         for (int i = 0; i < charsArray.length - 1; i++) {
             if (punctuationMarks.indexOf(charsArray[i]) >= 0 && charsArray[i + 1] == ' ') {
@@ -79,7 +78,7 @@ public class BruteForce {
             }
         }
 
-        // если между двумя буквами будет идти запятая или точка, будем считать это ошибкой шифра и штрафуем
+        // если между двумя буквами будет идти запятая или точка, считаю это ошибкой шифра и штрафую
         for (int i = 1; i < charsArray.length - 1; i++) {
             if (punctuationMarks.indexOf(charsArray[i]) >= 0
                     && Character.isLetter(charsArray[i - 1])
