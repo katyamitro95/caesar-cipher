@@ -51,16 +51,21 @@ public class Cipher {
             throw new CipherException("Ключ должен быть в диапазоне от 0 до " + (size - 1));
         }
 
-        StringBuilder strinBuid = new StringBuilder(encryptedText.length());
+        StringBuilder stringBuid = new StringBuilder(encryptedText.length());
         for (char c : encryptedText.toCharArray()) {
             Integer index = referenceMap.get(Character.toLowerCase(c));
+
             if (index == null) {
-                throw new CipherException("При расшифровке нашелся символ вне алфавита: '" + c + "'");
+                if (c == '\n' || c == '\r' || c == '\t') {
+                    stringBuid.append(c);
+                } else {
+                    throw new CipherException("При расшифровке нашелся символ вне алфавита: '" + c + "'");
+                }
             } else {
                 int newIndex = (index - shift + size) % size;
-                strinBuid.append(alphabet[newIndex]);
+                stringBuid.append(alphabet[newIndex]);
             }
         }
-        return strinBuid.toString();
+        return stringBuid.toString();
     }
 }
