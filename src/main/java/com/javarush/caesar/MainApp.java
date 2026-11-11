@@ -70,6 +70,9 @@ public class MainApp {
         }
 
         String outputFile = ask("Введите путь к файлу для результата: ");
+        if (outputFile == null || outputFile.isBlank()) {
+            throw new CipherException("Путь к выходному файлу не может быть пустым!");
+        }
         int key = readValidKey();
 
         String inputText = fileManager.readFile(inputFile);
@@ -86,6 +89,9 @@ public class MainApp {
         }
 
         String outputFile = ask("Введите путь к файлу для результата: ");
+        if (outputFile == null || outputFile.isBlank()) {
+            throw new CipherException("Путь к выходному файлу не может быть пустым!");
+        }
         int key = readValidKey();
 
         String inputText = fileManager.readFile(inputFile);
@@ -102,6 +108,9 @@ public class MainApp {
         }
 
         String outputFile = ask("Введите путь к файлу для результата: ");
+        if (outputFile == null || outputFile.isBlank()) {
+            throw new CipherException("Путь к выходному файлу не может быть пустым!");
+        }
 
         String inputText = fileManager.readFile(inputFile);
         String decryptedText = bruteForce.decryptByBruteForce(inputText, ALPHABET);
