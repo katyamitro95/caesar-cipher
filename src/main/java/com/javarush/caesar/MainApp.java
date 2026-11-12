@@ -64,21 +64,71 @@ public class MainApp {
     }
 
     private void encryptFile() throws CipherException {
-        // TODO спросить исходный файл, файл для результата и ключ
-        //  проверить их через validator, прочитать текст через fileManager,
-        //  зашифровать через cipher и записать результат
-        System.out.println("Режим пока не реализован");
+        String inputFile = askInputFile("Введите путь к исходному файлу для зашифровки: ");
+        String outputFile = askOutputFile("Введите путь к файлу для результата зашифровки: ");
+        int key = readValidKey();
+
+        String inputText = fileManager.readFile(inputFile);
+        String encryptedText = cipher.encrypt(inputText, key);
+        fileManager.writeFile(encryptedText, outputFile);
+
+        System.out.println("Текст файла был зашифрован и сохранен в: " + outputFile);
     }
 
     private void decryptFile() throws CipherException {
-        // TODO то же, что в encryptFile, только расшифровка
-        System.out.println("Режим пока не реализован");
+        String inputFile = askInputFile("Введите путь к зашифрованному файлу: ");
+        String outputFile = askOutputFile("Введите путь к файлу для сохранения результата расшифровки: ");
+        int key = readValidKey();
+
+        String inputText = fileManager.readFile(inputFile);
+        String decryptedText = cipher.decrypt(inputText, key);
+        fileManager.writeFile(decryptedText, outputFile);
+
+        System.out.println("Текст файла был расшифрован и сохранен в: " + outputFile);
     }
 
     private void bruteForceFile() throws CipherException {
-        // TODO спросить зашифрованный файл и файл для результата,
-        //  подобрать ключ через bruteForce и записать расшифрованный текст
-        System.out.println("Режим пока не реализован");
+        String inputFile = askInputFile("Введите путь к зашифрованному файлу: ");
+        String outputFile = askOutputFile("Введите путь к файлу для сохранения результата расшифровки: ");
+
+        String inputText = fileManager.readFile(inputFile);
+        String decryptedText = bruteForce.decryptByBruteForce(inputText, ALPHABET);
+        fileManager.writeFile(decryptedText, outputFile);
+
+        System.out.println("Текст файла был взломан и сохранен в: " + outputFile);
+
+    }
+
+    private int readValidKey() {
+        while (true) {
+            String strKey = ask("Введите ключ (целое число от 0 до " + (ALPHABET.length - 1) + "): ");
+            try {
+                int key = Integer.parseInt(strKey);
+                if (validator.isValidKey(key, ALPHABET)) {
+                    return key;
+                } else {
+                    System.out.println("Ошибка: ключ вне допустимого диапазона.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ошибка: введите именно число.");
+            }
+        }
+    }
+
+    private String askOutputFile(String text) throws CipherException {
+        String outputFile = ask(text);
+        if (outputFile.isBlank()) {
+            throw new CipherException("Путь к выходному файлу не может быть пустым!");
+        }
+        return outputFile;
+    }
+
+    private String askInputFile(String text) throws CipherException {
+        String inputFile = ask(text);
+        if (!validator.isFileExists(inputFile)) {
+            throw new CipherException("Входящий файл не был найден или является папкой: " + inputFile);
+        }
+        return inputFile;
     }
 
     private String ask(String prompt) {
